@@ -1,0 +1,9 @@
+bs4
+requests
+keybert
+numpy
+pymorphy2[fast]
+pymorphy2-dicts-ru
+pymorphy2-dicts-uk
+tqdm
+slate3k
