@@ -1,8 +1,9 @@
-from keybert import KeyBERT
+#from keybert import KeyBERT
 import numpy as np
 import re
 import pymorphy2
 from tqdm import tqdm, trange
+from nltk.tokenize import word_tokenize, wordpunct_tokenize
 
 class TextPreprocessing:
     def __init__(self, corpus:list) -> None:
@@ -45,11 +46,41 @@ class TextPreprocessing:
 
 
 def find_most_relevant_part(query:str, 
-                            text:str, length:int, 
-                            step:int, tokenizer) -> str:
+                            text:str,
+                            step:int, ) -> str:
     """
     Query: the pattern of words, we will be seeking for ITS most similar part
     Text: a big pile of words, hope to get something similar to query in it
-    length: 
+    length: the length of
     """
-    pass
+    stop_tokens = ['<ET>'] + list(',.!?')
+
+    query_tokens = tuple(wordpunct_tokenize(query))
+    text_tokens = word_tokenize(text)
+
+    part_len = len(query_tokens)
+
+    while len(text_tokens) % part_len != 0:
+        text_tokens.extend(['<ET>'])
+
+    max_sim_tokens = 0
+    sim_tokens = 0
+    best_part = ''
+
+    for i in range(0, len(text_tokens) - 1, step):
+        tokens = text_tokens[i:i+step]
+        print(tokens)
+
+        for token in tokens:
+            if token in query_tokens and token not in stop_tokens:
+                sim_tokens += 1
+
+        if sim_tokens >= max_sim_tokens:
+            max_sim_tokens = sim_tokens
+            best_part = tokens
+
+        sim_tokens = 0
+
+    best_part = ' '.join(best_part)
+
+    return best_part
