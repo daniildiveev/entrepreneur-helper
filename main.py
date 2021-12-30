@@ -1,7 +1,6 @@
 import telebot
 from config import *
-from parser import *
-from text_handling import *
+from text_handling import search_for_relevant_part_in_json
 
 bot = telebot.TeleBot(api)
 
@@ -12,30 +11,11 @@ def welcome_message(message):
 
 @bot.message_handler(content_types=['text'])
 def send_links(message):
-	url = 'http://www.consultant.ru/search/?q='
-	links = []
-
 	query = message.text
-	processor = TextPreprocessing([query])
-	query_preprocessed = processor.full_preprocessing()[0]
 
-	for word in query_preprocessed.split():
-		url += f'{word}+'
-	url = url[:-1]
+	best_part = search_for_relevant_part_in_json(path_to_json, query)
 
-	print(url)
-
-	while len(links) == 0:
-		links = parse_search_links(url)[:num_links_to_get]
-
-	texts = parse_texts(links)
-
-	reply = f'Cсылки по запросу: {query}\n'
-
-	for i, text in enumerate(texts):
-		reply += f'{i+1}.{text}} \n'
-
-	bot.send_message(message.chat.id, reply)
+	bot.send_message(message.chat.id, best_part)
 
 if __name__ == '__main__':
 	print('Bot started!')

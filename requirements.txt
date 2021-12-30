@@ -1,6 +1,6 @@
-<<<<<<< HEAD
 bs4
 requests
+pyTelegramBotAPI
 keybert
 numpy
 pymorphy2[fast]
@@ -8,14 +8,4 @@ pymorphy2-dicts-ru
 pymorphy2-dicts-uk
 tqdm
 nltk
-=======
-bs4
-requests
-keybert
-numpy
-pymorphy2[fast]
-pymorphy2-dicts-ru
-pymorphy2-dicts-uk
-tqdm
-nltk
->>>>>>> 3b71f214b222687f99594ed1a47ab618f4cc4425
+transformers
