@@ -1,9 +1,11 @@
-from keybert import KeyBERT
+#from keybert import KeyBERT
 import numpy as np
 import os
 import re
 import pymorphy2
 from tqdm import tqdm, trange
+import nltk
+nltk.download("punkt")
 from nltk.tokenize import word_tokenize, wordpunct_tokenize
 import json
 
@@ -86,7 +88,7 @@ def find_most_relevant_part(query:str,
     sim_tokens = 0
     best_part = ''
 
-    for i in range(0, len(text_tokens) - 1, step):
+    for i in range(0, len(text_tokens) - step,):
         tokens = text_tokens[i:i+step]
 
         for token in tokens:
@@ -116,7 +118,7 @@ def search_for_relevant_part_in_json(path_to_json:str, query:str) -> str:
     max_sim_tokens = 0
 
     for text in tuple(parts.values()):
-        found_part, sim_tokens = find_most_relevant_part(query, text, len(query)*2)
+        found_part, sim_tokens = find_most_relevant_part(query, text, 20)
 
         if sim_tokens > max_sim_tokens:
             max_sim_tokens = sim_tokens
@@ -124,5 +126,5 @@ def search_for_relevant_part_in_json(path_to_json:str, query:str) -> str:
 
     return best_part
 
-best_part = search_for_relevant_part_in_json("data_1.json", "Ревизионная проверка у индивидуальных предпринимателей")
+best_part = search_for_relevant_part_in_json("data_1.json", "Обязан ли самозанятый формировать чек")
 print(best_part)

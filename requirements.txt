@@ -7,5 +7,5 @@ pymorphy2[fast]
 pymorphy2-dicts-ru
 pymorphy2-dicts-uk
 tqdm
-nltk
-transformers
+nltk==3.6.3
+simpletransformers==0.63.3
