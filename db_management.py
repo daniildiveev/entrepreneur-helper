@@ -52,6 +52,7 @@ def get_user_stats(db_path: str, user_id:int) -> list:
 
 def add_request_record(db_path:str, user_id:int, query:str) -> None:
     if not os.path.exists(db_path): raise FileNotFoundError(f'There is no file {db_path}')
+    if not os.environ['REQUESTS_ID']: os.environ['REQUESTS_ID'] = '0' 
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -67,7 +68,7 @@ def add_request_record(db_path:str, user_id:int, query:str) -> None:
     except sqlite3.OperationalError:
         print('Successfully found REQUESTS table!')
 
-    request_id = np.random.randint(0, 10000000)
+    request_id = int(os.environ['REQUESTS_ID']) + 1
 
     cursor.execute('''INSERT INTO REQUESTS VALUES(?, ?, ?, ?)''', (user_id, request_id, datetime.now(), query))
 
