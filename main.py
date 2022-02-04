@@ -2,11 +2,13 @@ import telebot
 from config import *
 from transformers import pipeline
 from db_management import *
+from parsers import multiple_parse
+from text_handling import *
+from nn import *
 
 bot = telebot.TeleBot(API)
-'''qa = pipeline(task='question-answering', 
-			  model='AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru',
-			  tokenizer='AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru')'''
+qa = get_model_for_qa(QA_MODEL)
+sentence_model = get_model_for_sentence_similarity(SENTENCE_MODEL)
 
 @bot.message_handler(commands=['start'])
 def welcome_message(message):
@@ -24,17 +26,22 @@ def send_links(message):
 	else:
 		update_users_table(USER_DATABASE, user)
 
-	best_part = "Mistborn is a series of epic fantasy novels written by American author Brandon Sanderson."#search_for_relevant_part_in_json(path_to_json, query)
+	texts = multiple_parse(query)
+	max_similiraty = 0
+	
+	for text in texts:
+		part, similiraty = get_most_similar_part(sentence_model, query, texts)
 
-	'''reply = qa({
-		"context": 'Даня любит играть в доту.',
-		"question": 'Что любит делать Даня?'
-	})['answer']'''
+		if similiraty > max_similiraty:
+			max_similiraty = similiraty
+			best_part = part
 
-	reply = 'ti loch'
+	print(best_part)
+	
+	reply = get_answer_from_text(qa_model, query, best_part)
 
 	add_request_record(REQUEST_DATABASE, user, query)
-	bot.send_message(message.chat.id, reply)
+	bot.send_message(message.chat.id, best_part)
 
 if __name__ == '__main__':
 	print('Bot started!')

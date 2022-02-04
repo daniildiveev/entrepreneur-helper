@@ -32,6 +32,15 @@ def get_user_stats(db_path: str, user_id:int) -> list:
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
 
+    try:
+        cursor.execute('''CREATE TABLE USERS(
+        USER_ID INTEGER PRIMARY KEY,
+        USED_BEFORE INTEGER)''')
+
+        print('Successfully created table USERS')
+    except:
+        print('Successfully found table USERS')
+
     cursor.execute(f'''SELECT *
                        FROM USERS
                        WHERE USER_ID = {user_id}''')

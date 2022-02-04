@@ -1,13 +1,10 @@
-#from keybert import KeyBERT
 import numpy as np
-import os
 import re
 import pymorphy2
 from tqdm import tqdm, trange
 import nltk
 nltk.download("punkt")
 from nltk.tokenize import word_tokenize, wordpunct_tokenize
-import json
 
 class TextPreprocessing:
     def __init__(self, corpus:list) -> None:
@@ -107,24 +104,3 @@ def find_most_relevant_part(query:str,
     best_part = ' '.join(best_part)
 
     return best_part, max_sim_tokens
-
-def search_for_relevant_part_in_json(path_to_json:str, query:str) -> str:
-    if not os.path.exists(path_to_json): raise FileNotFoundError(f"No file {path_to_json}")
-    if not path_to_json.split(".")[-1] == 'json': raise TypeError(f"Your file {path_to_json} is not .json")
-
-    with open(path_to_json, 'r', encoding='utf=8') as f:
-        parts = json.loads(f.read())
-
-    max_sim_tokens = 0
-
-    for text in tuple(parts.values()):
-        found_part, sim_tokens = find_most_relevant_part(query, text, 20)
-
-        if sim_tokens > max_sim_tokens:
-            max_sim_tokens = sim_tokens
-            best_part = found_part
-
-    return best_part
-
-best_part = search_for_relevant_part_in_json("data_1.json", "Обязан ли самозанятый формировать чек")
-print(best_part)

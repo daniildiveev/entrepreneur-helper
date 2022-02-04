@@ -1,5 +1,7 @@
 API = '1726578435:AAGg-mQXh9gvaQ2TO5JgQm2-Ww1aWYIwOGE'
-num_links_to_get = 10
-path_to_json = "data_1.json"
+NUM_LINKS_TO_GET = 5
+PATH_TO_JSON = "data_1.json"
 USER_DATABASE = 'users.db'
-REQUEST_DATABASE = 'request.db'
+REQUEST_DATABASE = 'requests.db'
+QA_MODEL = 'AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru'
+SENTENCE_MODEL = 'symanto/sn-xlm-roberta-base-snli-mnli-anli-xnli'
