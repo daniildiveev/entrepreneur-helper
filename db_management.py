@@ -75,6 +75,8 @@ def add_request_record(db_path:str, user_id:int, query:str) -> None:
     connection.commit()
     connection.close()
 
+    os.environ['REQUESTS_ID'] = str(request_id)
+
     print('Record added successfully!')
 
 def update_users_table(db_path:str, user_id:int) -> None:

@@ -1,3 +1,4 @@
+from aiohttp import request
 from bs4 import BeautifulSoup
 import requests
 import os
@@ -18,6 +19,7 @@ def parse_google(query:str) -> list:
 		texts.append(text)
 
 	return texts
+
 
 def nalog_ru_parser(query) -> list:
 	texts, links = [], []
@@ -43,6 +45,7 @@ def nalog_ru_parser(query) -> list:
 
 	return texts
 
+
 def search_for_relevant_part_in_json(path_to_json:str, query:str) -> str:
     if not os.path.exists(path_to_json): raise FileNotFoundError(f"No file {path_to_json}")
     if not path_to_json.split(".")[-1] == 'json': raise TypeError(f"Your file {path_to_json} is not .json")
@@ -61,7 +64,31 @@ def search_for_relevant_part_in_json(path_to_json:str, query:str) -> str:
 
     return best_part, max_sim_tokens
 
+
 def multiple_parse(query:str) -> list: 
 	json_best_part, _ = search_for_relevant_part_in_json(PATH_TO_JSON, query)
 	return nalog_ru_parser(query) + parse_google(query) + [json_best_part] 
+
+
+def get_info_on_specific_entrepreneur(query: str):
+	url = 'https://zachestnyibiznes.ru/search?query='
+
+	for token in query.split():
+		url += f"{token}+"
+
+	url = url[:-1]
+
+	html = requests.get(url).text
+
+	soup = BeautifulSoup(html, 'lxml')
+	link = soup.find('a', {'class' : 'f-s-16 no-underline'})
+
+	url = 'https://zachestnyibiznes.ru/' + link['href']
+	
+	html = requests.get(url).text
+	soup = BeautifulSoup(html, 'lxml')
+
+	
+
+
 	

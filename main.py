@@ -16,7 +16,7 @@ def welcome_message(message):
 		'Hello, this is a bot, that helps you with your law practice')
 
 @bot.message_handler(content_types=['text'])
-def send_links(message):
+def send_reply(message):
 	query = message.text
 	user = message.from_user.id
 	user_stats = get_user_stats(USER_DATABASE, user)
@@ -38,7 +38,7 @@ def send_links(message):
 
 	print(best_part)
 	
-	reply = get_answer_from_text(qa_model, query, best_part)
+	reply = get_answer_from_text(qa, query, best_part)
 
 	add_request_record(REQUEST_DATABASE, user, query)
 	bot.send_message(message.chat.id, best_part)
