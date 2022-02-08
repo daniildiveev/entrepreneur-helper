@@ -15,33 +15,39 @@ def welcome_message(message):
 	bot.send_message(message.chat.id, 
 		'Hello, this is a bot, that helps you with your law practice')
 
+
 @bot.message_handler(content_types=['text'])
 def send_reply(message):
-	query = message.text
-	user = message.from_user.id
-	user_stats = get_user_stats(USER_DATABASE, user)
+    query = message.text
+    user = message.from_user.id
+    user_stats = get_user_stats(USER_DATABASE, user)
 
-	if not user_stats:
-		add_user_record(USER_DATABASE, user, 1)
-	else:
-		update_users_table(USER_DATABASE, user)
+    if not user_stats:
+        add_user_record(USER_DATABASE, user, 1)
+    else:
+        update_users_table(USER_DATABASE, user)
 
-	texts = multiple_parse(query)
-	max_similiraty = 0
-	
-	for text in texts:
-		part, similiraty = get_most_similar_part(sentence_model, query, texts)
+    texts = multiple_parse(query)
+    max_similiraty = 0
 
-		if similiraty > max_similiraty:
-			max_similiraty = similiraty
-			best_part = part
+    preprocessing = TextPreprocessing([query] + texts)
+    preprocessing.remove_punctuation()
+    query = preprocessing.corpus[0]
+    corpus = preprocessing.corpus[1:]
 
-	print(best_part)
-	
-	reply = get_answer_from_text(qa, query, best_part)
+    print(f'Lemmatized input: {query}')
 
-	add_request_record(REQUEST_DATABASE, user, query)
-	bot.send_message(message.chat.id, best_part)
+    best_part = get_most_similar_part(sentence_model, query, corpus)
+    reply = get_answer_from_text(qa, query, best_part)
+
+    print(reply)
+
+    add_request_record(REQUEST_DATABASE, user, query)
+    bot.send_message(message.chat.id, reply)
+
+if __name__ == '__main__':
+	print('Bot started!')
+	bot.polling()
 
 if __name__ == '__main__':
 	print('Bot started!')

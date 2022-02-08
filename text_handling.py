@@ -10,7 +10,7 @@ class TextPreprocessing:
     def __init__(self, corpus:list) -> None:
         self.corpus = corpus
 
-    def punctuation(self) -> list:
+    def remove_punctuation(self) -> list:
         for i in range(len(self.corpus)):
             self.corpus[i] = self.corpus[i].lower()
             self.corpus[i] = re.findall(r'\w+', self.corpus[i]) #regex for removing any punctuation
@@ -71,7 +71,7 @@ def find_most_relevant_part(query:str,
     stop_tokens = [empty_token] + list(',.!?')
 
     handler = TextPreprocessing([query])
-    query = handler.punctuation()[0]
+    query = handler.remove_punctuation()[0]
 
     query_tokens = tuple(wordpunct_tokenize(query))
     text_tokens = word_tokenize(text)

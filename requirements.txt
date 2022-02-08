@@ -1,7 +1,6 @@
 bs4
 requests
 pyTelegramBotAPI
-keybert
 numpy
 pymorphy2[fast]
 pymorphy2-dicts-ru

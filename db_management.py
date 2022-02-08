@@ -52,7 +52,10 @@ def get_user_stats(db_path: str, user_id:int) -> list:
 
 def add_request_record(db_path:str, user_id:int, query:str) -> None:
     if not os.path.exists(db_path): raise FileNotFoundError(f'There is no file {db_path}')
-    if not os.environ['REQUESTS_ID']: os.environ['REQUESTS_ID'] = '0' 
+    try:
+        os.environ['REQUESTS_ID']
+    except KeyError:
+        os.environ['REQUESTS_ID'] = '0'
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
