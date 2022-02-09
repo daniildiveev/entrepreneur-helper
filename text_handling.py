@@ -18,8 +18,8 @@ class TextPreprocessing:
 
         return self.corpus
 
-    def preprocess_html(self, corpus:list) -> list:
-        for i in range(len(corpus)):
+    def preprocess_html(self) -> list:
+        for i in range(len(self.corpus)):
             self.corpus[i] = str(self.corpus[i]).replace('[', '').replace(']', '')
             self.corpus[i] = re.sub(r"<.*?>", "", self.corpus[i])
             self.corpus[i] = re.sub(r"[a-zA-Z]", " ", self.corpus[i])
@@ -47,6 +47,12 @@ class TextPreprocessing:
         self.corpus = self.punctuation()
         self.corpus = self.lemmatize()
 
+        return self.corpus
+    
+    def extract_sentences(self) -> list:
+        self.corpus = [nltk.sent_tokenize(sentence, language='russian') for sentence in self.corpus]
+        self.corpus = [re.sub(r"\n", "", sentence) for sentence in self.corpus]
+        
         return self.corpus
 
     def extract_key_words(self):

@@ -1,4 +1,3 @@
-from aiohttp import request
 from bs4 import BeautifulSoup
 import requests
 import os

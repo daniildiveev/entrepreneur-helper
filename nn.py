@@ -38,7 +38,6 @@ def get_most_similar_part(model, query:str, sentences:list) -> str:
     corpus_embed = model.encode(sentences)
 
     similarities = []
-    max_similarity = 0
 
     for embedding in corpus_embed:
         similarities.append(1 - cosine(query_embed, embedding))
@@ -48,4 +47,4 @@ def get_most_similar_part(model, query:str, sentences:list) -> str:
     best_index = np.argmax(similarities)
     best_part = sentences[best_index]
     
-    return best_part
+    return best_part, np.max(similarities)

@@ -5,3 +5,4 @@ USER_DATABASE = 'users.db'
 REQUEST_DATABASE = 'requests.db'
 QA_MODEL = 'AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru'
 SENTENCE_MODEL = 'symanto/sn-xlm-roberta-base-snli-mnli-anli-xnli'
+SIMILARITY_THRESHOLD = 0.7

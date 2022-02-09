@@ -28,26 +28,21 @@ def send_reply(message):
         update_users_table(USER_DATABASE, user)
 
     texts = multiple_parse(query)
-    max_similiraty = 0
 
     preprocessing = TextPreprocessing([query] + texts)
     preprocessing.remove_punctuation()
     query = preprocessing.corpus[0]
-    corpus = preprocessing.corpus[1:]
+    best_part = preprocessing.corpus[1:]
+    
+    for i in range(5):
+        best_part = get_most_similar_part(sentence_model, query, best_part)
 
-    print(f'Lemmatized input: {query}')
-
-    best_part = get_most_similar_part(sentence_model, query, corpus)
     reply = get_answer_from_text(qa, query, best_part)
 
     print(reply)
 
     add_request_record(REQUEST_DATABASE, user, query)
-    bot.send_message(message.chat.id, reply)
-
-if __name__ == '__main__':
-	print('Bot started!')
-	bot.polling()
+    bot.send_message(message.chat.id, reply) 
 
 if __name__ == '__main__':
 	print('Bot started!')
