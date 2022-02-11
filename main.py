@@ -29,15 +29,14 @@ def send_reply(message):
 
     texts = multiple_parse(query)
 
-    preprocessing = TextPreprocessing([query] + texts)
-    preprocessing.remove_punctuation()
-    query = preprocessing.corpus[0]
-    best_part = preprocessing.corpus[1:]
-    
-    for i in range(5):
-        best_part = get_most_similar_part(sentence_model, query, best_part)
+    preprocessing = TextPreprocessing(texts)
+    texts = preprocessing.preprocess_html()
 
-    reply = get_answer_from_text(qa, query, best_part)
+    best_part = get_most_similar_part(sentence_model, query, texts)
+    sentences = [nltk.sent_tokenize(sentence) for sentence in best_part]
+    best_sentence = get_most_similar_part(sentence_model, query, sentences)
+
+    reply = get_answer_from_text(qa, query, best_sentence)
 
     print(reply)
 

@@ -47,4 +47,4 @@ def get_most_similar_part(model, query:str, sentences:list) -> str:
     best_index = np.argmax(similarities)
     best_part = sentences[best_index]
     
-    return best_part, np.max(similarities)
+    return best_part

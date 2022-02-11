@@ -48,21 +48,6 @@ class TextPreprocessing:
         self.corpus = self.lemmatize()
 
         return self.corpus
-    
-    def extract_sentences(self) -> list:
-        self.corpus = [nltk.sent_tokenize(sentence, language='russian') for sentence in self.corpus]
-        self.corpus = [re.sub(r"\n", "", sentence) for sentence in self.corpus]
-        
-        return self.corpus
-
-    def extract_key_words(self):
-        model = KeyBERT()
-        keywords = []
-
-        for i in range(len(self.corpus)):
-            keywords.extend(model.extract_keywords(self.corpus[i]))
-
-        return keywords
 
 
 def find_most_relevant_part(query:str, 
