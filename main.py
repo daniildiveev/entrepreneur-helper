@@ -1,6 +1,5 @@
 import telebot
 from config import *
-from transformers import pipeline
 from db_management import *
 from parsers import multiple_parse
 from text_handling import *
@@ -33,13 +32,8 @@ def send_reply(message):
     texts = preprocessing.preprocess_html()
 
     best_part = get_most_similar_part(sentence_model, query, texts)
-    sentences = [nltk.sent_tokenize(sentence) for sentence in best_part]
-    best_sentence = get_most_similar_part(sentence_model, query, sentences)
-
-    reply = get_answer_from_text(qa, query, best_sentence)
-
-    print(reply)
-
+    reply = get_answer_from_text(qa, query, best_part)
+    
     add_request_record(REQUEST_DATABASE, user, query)
     bot.send_message(message.chat.id, reply) 
 

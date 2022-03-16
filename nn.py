@@ -24,15 +24,6 @@ def get_answer_from_text(qa_pipeline, q:str, context:str) -> str:
     return prediction['answer']
 
 
-def embed_similatiry(query:str, embeddings:list):
-    cosine_similarities = []
-
-    for i in range(len(embeddings)):
-        cosine_similarities.append(1 - cosine(query, embeddings[i]))
-
-    return cosine_similarities
-
-
 def get_most_similar_part(model, query:str, sentences:list) -> str:
     query_embed = model.encode([query])
     corpus_embed = model.encode(sentences)

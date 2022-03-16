@@ -70,15 +70,17 @@ def search_for_relevant_part_in_json(query:str, results:list) -> str:
 def wiki_parser(query:str, results:list) -> list:
 	wiki.set_lang("ru")
 	search_results = wiki.search(query)
-	page = wiki.page(search_results[0])
-	
-	results.append(page.content)
 
+	try:
+		page = wiki.page(search_results[0])
+		results.append(page.content)
+	except IndexError:
+		results.append(' ')
 
 def multiple_parse(query:str) -> list: 
 	thread_list, results = [], []
 
-	for func in (nalog_ru_parser, search_for_relevant_part_in_json, parse_google, wiki_parser):
+	for func in (search_for_relevant_part_in_json, parse_google, wiki_parser):
 		thread = threading.Thread(target=func, args=(query,results))
 		thread_list.append(thread,)
 		thread.start()
@@ -89,29 +91,3 @@ def multiple_parse(query:str) -> list:
 		thread_list[i].join()
 
 	return results
-
-
-def get_info_on_specific_entrepreneur(query: str):
-	url = 'https://zachestnyibiznes.ru/search?query='
-
-	for token in query.split():
-		url += f"{token}+"
-
-	url = url[:-1]
-
-	html = requests.get(url).text
-
-	soup = BeautifulSoup(html, 'lxml')
-	link = soup.find('a', {'class' : 'f-s-16'})
-
-	url = 'https://zachestnyibiznes.ru/' + link['href']
-	
-	html = requests.get(url).text
-	soup = BeautifulSoup(html, 'lxml')
-
-	div_el = soup.find('div', {'class' : 'col-md-6'})
-	soup = BeautifulSoup(str(div_el), 'lxml')
-
-	p_els = soup.find_all('p', {'class' : 'm-b-10 no-indent'})
-
-	print(p_els)

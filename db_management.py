@@ -7,7 +7,7 @@ def add_user_record(db_path: str, user_id: int, times_used: int) -> None:
     if not os.path.exists(db_path): raise FileNotFoundError(f'There is no file {db_path}')
 
     connection = sqlite3.connect(db_path)
-    cursor = connection.cursor()
+    cursor = connection.cursor() 
 
     try:
         cursor.execute('''CREATE TABLE USERS(
@@ -15,7 +15,7 @@ def add_user_record(db_path: str, user_id: int, times_used: int) -> None:
         USED_BEFORE INTEGER)''')
 
         print('Successfully created table USERS')
-    except:
+    except sqlite3.OperationalError:
         print('Successfully found table USERS')
 
     cursor.execute(f'''INSERT INTO USERS VALUES(
@@ -38,7 +38,7 @@ def get_user_stats(db_path: str, user_id:int) -> list:
         USED_BEFORE INTEGER)''')
 
         print('Successfully created table USERS')
-    except:
+    except sqlite3.OperationalError:
         print('Successfully found table USERS')
 
     cursor.execute(f'''SELECT *
@@ -53,7 +53,7 @@ def get_user_stats(db_path: str, user_id:int) -> list:
 def add_request_record(db_path:str, user_id:int, query:str) -> None:
     if not os.path.exists(db_path): raise FileNotFoundError(f'There is no file {db_path}')
     try:
-        os.environ['REQUESTS_ID']
+        request_id = os.environ['REQUESTS_ID']
     except KeyError:
         os.environ['REQUESTS_ID'] = '0'
 
@@ -99,6 +99,3 @@ def update_users_table(db_path:str, user_id:int) -> None:
     connection.close()
 
     print('Successfully updated USERS database!')
-
-
-

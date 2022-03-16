@@ -12,7 +12,7 @@ class TextPreprocessing:
 
     def remove_punctuation(self) -> list:
         for i in range(len(self.corpus)):
-            self.corpus[i] = self.corpus[i].lower()
+            self.corpus[i] = self.corpus[i].lower() 
             self.corpus[i] = re.findall(r'\w+', self.corpus[i]) #regex for removing any punctuation
             self.corpus[i] = ' '.join(self.corpus[i])
 
