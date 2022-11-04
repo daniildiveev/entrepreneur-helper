@@ -1,4 +1,10 @@
-API = '1726578435:AAGg-mQXh9gvaQ2TO5JgQm2-Ww1aWYIwOGE'
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TOKEN = os.environ.get("TOKEN")
+
 NUM_LINKS_TO_GET = 5
 PATH_TO_JSON = "data_1.json"
 USER_DATABASE = 'users.db'
