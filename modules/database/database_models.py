@@ -6,7 +6,7 @@ Base = declarative_base()
 class Request(Base):
     __tablename__ = 'requests'
 
-    user_id = sa.Column(sa.INTEGER, foreign_key=True)
+    user_id = sa.Column(sa.INTEGER)
     request_id = sa.Column(sa.INTEGER, primary_key=True)
     time = sa.Column(sa.DATETIME)
     query = sa.Column(sa.TEXT)
