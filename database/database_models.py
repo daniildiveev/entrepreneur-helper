@@ -3,7 +3,7 @@ import sqlalchemy as sa
 
 Base = declarative_base()
 
-class Requests(Base):
+class Request(Base):
     __tablename__ = 'requests'
 
     user_id = sa.Column(sa.INTEGER, foreign_key=True)
