@@ -8,7 +8,7 @@ class Request(Base):
 
     user_id = sa.Column(sa.INTEGER)
     request_id = sa.Column(sa.INTEGER, primary_key=True)
-    time = sa.Column(sa.DATETIME)
+    time = sa.Column(sa.TIMESTAMP)
     query = sa.Column(sa.TEXT)
 
 class User(Base):
