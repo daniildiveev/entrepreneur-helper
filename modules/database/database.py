@@ -6,11 +6,10 @@ from .database_models import User, Request, Base
 from modules.setup.config import settings
 
 engine = create_engine(
-    settings.database_source,
-    connect_args={"check_same_thread": False}
+    settings.database_source
 )
 
-Base.metadata.create_all()
+Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(
     autocommit=False,
