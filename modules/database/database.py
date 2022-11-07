@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import List
 from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
-from ..config.config import settings
 from .database_models import User, Request, Base
+from modules.setup.config import settings
 
 engine = create_engine(
     settings.database_source,
