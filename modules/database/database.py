@@ -1,6 +1,6 @@
 from datetime import datetime
-from typing import List
-from sqlalchemy import create_engine, update
+from typing import List, Tuple
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .database_models import User, Request, Base
 from modules.setup.config import settings
@@ -29,21 +29,20 @@ def add_request_record(user_id:int, query:str) -> None:
         session.add(new_request)
         session.commit()
 
-def add_user_record(user_id:int, times_used_before:int) -> None:
+def add_user_record(times_used_before:int=0) -> None:
     with Session() as session:
-        new_user = User(user_id=user_id, times_used_before=times_used_before)
+        new_user = User(times_used_before=times_used_before)
         session.add(new_user)
         session.commit()
 
-def get_user_stats(user_id:int) -> List[str]:
+def get_user_requests(user_id:int) -> List[tuple]:
     with Session() as session:
         requests = session.query(Request).filter_by(user_id=user_id).all()
 
     return requests
 
-
 def update_user_table(user_id:int) -> None:
-    user_id, times_used = get_user_stats(user_id)
+    times_used = len(get_user_requests(user_id))
 
     with Session() as session: 
         session.query(User) \
