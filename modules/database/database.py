@@ -35,7 +35,7 @@ def add_user_record(times_used_before:int=0) -> None:
         session.add(new_user)
         session.commit()
 
-def get_user_requests(user_id:int) -> List[tuple]:
+def get_user_requests(user_id:int) -> List[Tuple]:
     with Session() as session:
         requests = session.query(Request).filter_by(user_id=user_id).all()
 
