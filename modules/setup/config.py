@@ -9,6 +9,9 @@ DB_USER = os.environ.get("DB_USER")
 DB_NAME = os.environ.get("DB_NAME")
 USER_PASSWORD = os.environ.get("USER_PASSWORD")
 
+SEARCH = 'Search'
+HISTORY = 'Show history'
+
 NUM_LINKS_TO_GET = 5
 QA_MODEL = 'AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru'
 SENTENCE_MODEL = 'symanto/sn-xlm-roberta-base-snli-mnli-anli-xnli'
