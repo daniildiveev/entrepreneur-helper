@@ -1,42 +1,39 @@
 import telebot
-from config import *
-from db_management import *
-from parsers import multiple_parse
-from text_handling import *
-from nn import *
+from telebot import types
+from modules.database.database import * 
+from modules.setup import config as cfg
+from modules.parsing import parsers
 
-bot = telebot.TeleBot(API)
-qa = get_model_for_qa(QA_MODEL)
-sentence_model = get_model_for_sentence_similarity(SENTENCE_MODEL)
+bot = telebot.TeleBot(cfg.TOKEN)
 
 @bot.message_handler(commands=['start'])
-def welcome_message(message):
-	bot.send_message(message.chat.id, 
-		'Hello, this is a bot, that helps you with your law practice')
+def send_keyboard(message, text:str='Hello, how can i help you?'):
+    keyboard = types.ReplyKeyboardMarkup(row_width=2)
+    search_button = types.KeyboardButton(cfg.SEARCH)
+    history_button = types.KeyboardButton(cfg.HISTORY)
 
+    keyboard.add(search_button, history_button)
 
-@bot.message_handler(content_types=['text'])
-def send_reply(message):
-    query = message.text
-    user = message.from_user.id
-    user_stats = get_user_stats(USER_DATABASE, user)
+    if len(get_user_requests(message.user_id)) == 0:
+        bot.send_message(message.chat.id, "Looks like you've never been before here!")
 
-    if not user_stats:
-        add_user_record(USER_DATABASE, user, 1)
+    message = bot.send_message(
+        message.from_user.id,
+        text=text,
+        reply_markup=keyboard
+    )
+
+def callback_worker(message):
+    if message.text == cfg.SEARCH:
+        pass
+
+    elif message.text == cfg.HISTORY:
+        pass
+
     else:
-        update_users_table(USER_DATABASE, user)
+        send_keyboard(message, "Did not understand you!")
 
-    texts = multiple_parse(query)
-
-    preprocessing = TextPreprocessing(texts)
-    texts = preprocessing.preprocess_html()
-
-    best_part = get_most_similar_part(sentence_model, query, texts)
-    reply = get_answer_from_text(qa, query, best_part)
-    
-    add_request_record(REQUEST_DATABASE, user, query)
-    bot.send_message(message.chat.id, reply) 
 
 if __name__ == '__main__':
-	print('Bot started!')
-	bot.polling()
+    print("Bot started")
+    bot.infinity_polling()
